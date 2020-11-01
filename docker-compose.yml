@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   metabase:
-    image: coolersport/metabase:0.37.0.1
+    image: coolersport/metabase:0.37.0.2
     read_only: true
     user: metabase
     depends_on:
@@ -34,6 +34,8 @@ services:
       MB_ENABLE_QUERY_CACHING: 'true'
       MB_GOOGLE_AUTH_CLIENT_ID: 
       MB_GOOGLE_AUTH_AUTO_CREATE_ACCOUNTS_DOMAIN: 
+      MB_SHOW_HOMEPAGE_XRAYS: 'false'
+      MB_SHOW_HOMEPAGE_DATA: 'false'
 # see more at https://www.metabase.com/docs/latest/operations-guide/environment-variables.html
     volumes:
     - plugins:/tmp:rw

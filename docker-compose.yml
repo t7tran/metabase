@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   metabase:
-    image: coolersport/metabase:0.37.0.2
+    image: coolersport/metabase:0.37.1
     read_only: true
     user: metabase
     depends_on:

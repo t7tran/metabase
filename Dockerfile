@@ -1,6 +1,6 @@
 FROM openjdk:8-jre-alpine
 
-ENV METABASE_VERSION=0.39.2
+ENV METABASE_VERSION=0.40.3
 
 COPY ./rootfs /
 

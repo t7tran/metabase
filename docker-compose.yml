@@ -1,7 +1,7 @@
 version: '3.4'
 services:
   metabase:
-    image: t7tran/metabase:0.40.3
+    image: t7tran/metabase:0.40.5
     read_only: true
     user: metabase
     depends_on:
@@ -26,6 +26,7 @@ services:
       MB_ASYNC_QUERY_THREAD_POOL_SIZE: 50
       MB_CHECK_FOR_UPDATES: 'false'
       MB_DB_AUTOMIGRATE: 'true'
+      MB_EMAIL_FROM_ADDRESS: 
       MB_EMAIL_SMTP_HOST: 
       MB_EMAIL_SMTP_PORT: 
       MB_EMAIL_SMTP_SECURITY: 
@@ -41,7 +42,7 @@ services:
     - plugins:/tmp:rw
     - plugins:/opt/plugins:rw
   mysql:
-    image: mysql:5.7
+    image: t7tran/mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: dev
       MYSQL_USER: dev

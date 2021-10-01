@@ -1,6 +1,9 @@
 FROM openjdk:8-jre-alpine
 
-ENV METABASE_VERSION=0.40.5
+ENV METABASE_VERSION=0.40.5 \
+    MB_ANON_TRACKING_ENABLED=false \
+    MB_CHECK_FOR_UPDATES=false \
+    MB_EMOJI_IN_LOGS=false
 
 COPY ./rootfs /
 

@@ -33,6 +33,13 @@ login() {
 	SESSIONID=`invoke /api/session "${JSON}" | jq -r '.id // empty'`
 }
 
+logout() {
+	[[ -z "$SESSIONID" ]] && return 0
+
+	invoke DELETE /api/session/
+	SESSIONID=
+}
+
 updateEmbeddingSecretKey() {
 	login
 
@@ -123,3 +130,5 @@ setup() {
 }
 
 [[ "${MB_AUTO_SETUP:-true}" == "true" ]] && setup
+
+logout

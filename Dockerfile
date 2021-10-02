@@ -4,7 +4,8 @@ ENV METABASE_VERSION=0.40.5 \
     JQ_VERSION=1.6 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \
-    MB_EMOJI_IN_LOGS=false
+    MB_EMOJI_IN_LOGS=false \
+    MB_ENABLE_EMBEDDING=true
 
 COPY ./rootfs /
 

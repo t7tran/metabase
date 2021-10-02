@@ -74,7 +74,7 @@ defaultDashboard() {
 		invoke PUT /api/dashboard/1/cards "${JSON}" &>/dev/null
 	fi
 
-	[[ "$MB_ENABLE_EMBEDDING" == "true" ]] && invoke PUT /api/dashboard/1 '{enable_embedding: true}' &>/dev/null
+	[[ "$MB_ENABLE_EMBEDDING" == "true" ]] && invoke PUT /api/dashboard/1 '{"enable_embedding": true}' &>/dev/null
 }
 
 setup() {

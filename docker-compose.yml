@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 services:
   metabase:
     image: t7tran/metabase:0.40.5
@@ -8,6 +8,11 @@ services:
     - mysql
     ports:
     - "3000:3000"
+    healthcheck:
+      test: ["CMD", "bootstrap"]
+      interval: 5s
+      timeout: 3s
+      retries: 60
     environment:
       MB_DB_TYPE: mysql
       MB_DB_HOST: mysql
@@ -17,9 +22,6 @@ services:
       MB_DB_PASS: dev
       MB_PLUGINS_DIR: /opt/plugins
       MB_ENCRYPTION_SECRET_KEY: 0123456789abcxyz
-      MB_SITE_NAME: Test Metabase
-      MB_SITE_URL: http://localhost:3000
-#      MB_ADMIN_EMAIL: 
       MB_JDBC_DATA_WAREHOUSE_MAX_CONNECTION_POOL_SIZE: 15
       MB_APPLICATION_DB_MAX_CONNECTION_POOL_SIZE: 15
       MB_ASYNC_QUERY_THREAD_POOL_SIZE: 50
@@ -35,18 +37,40 @@ services:
       MB_SHOW_HOMEPAGE_XRAYS: 'false'
       MB_SHOW_HOMEPAGE_DATA: 'false'
 # see more at https://www.metabase.com/docs/latest/operations-guide/environment-variables.html
+
+      MB_SITE_NAME: Test Metabase
+      MB_SITE_URL: http://localhost:3000
+      MB_SITE_LOCALE: en
+
+      MB_ADMIN_FIRSTNAME: Meta
+      MB_ADMIN_LASTNAME: Admin
+      MB_ADMIN_EMAIL: admin@metabase.com
+      MB_ADMIN_PASSWORD: S3cP4ssW000
+
+      MB_BOOTSTRAP_DB_TYPE: mysql
+      MB_BOOTSTRAP_DB_NAME: Test DB
+      MB_BOOTSTRAP_DB_HOST: mysql
+      MB_BOOTSTRAP_DB_PORT: 3306
+      MB_BOOTSTRAP_DB_DBNAME: testdb
+      MB_BOOTSTRAP_DB_USER: dev
+      MB_BOOTSTRAP_DB_PASS: dev
+
     volumes:
-    - plugins:/tmp:rw
+    - temp:/tmp:rw
     - plugins:/opt/plugins:rw
   mysql:
     image: t7tran/mysql:5.7
+    read_only: true
     environment:
       MYSQL_ROOT_PASSWORD: dev
       MYSQL_USER: dev
       MYSQL_PASSWORD: dev
     volumes:
     - mysql:/var/lib/mysql:rw
+    - temp:/var/run/mysqld:rw
+    - temp:/tmp:rw
     - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    - ./mysqlsampledatabase.sql:/opt/mysqlsampledatabase.sql:ro
 volumes:
   mysql:
     labels:
@@ -55,4 +79,7 @@ volumes:
   plugins:
     labels:
     - "keep=true"
+    - "app=metabase"
+  temp:
+    labels:
     - "app=metabase"

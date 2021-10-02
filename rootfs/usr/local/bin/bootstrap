@@ -1,0 +1,54 @@
+#!/usr/bin/env bash
+
+[[ "$@" == *debug* ]] && set -x
+
+status=`curl --connect-timeout 1 -fsSL http://127.0.0.1:3000/api/health 2>/dev/null | jq -r '.status // empty'`
+[[ "$status" != "ok" ]] && exit 1
+
+setup() {
+	local SETUPTOKEN=`curl -fsSL http://127.0.0.1:3000/api/session/properties 2>/dev/null | jq -r '.["setup-token"] // empty'`
+	[[ -z "$SETUPTOKEN" ]] && return 0
+
+	echo Metabase auto setup started.
+
+	read -r -d '' JSON <<-EOF
+		{
+			"token": "$SETUPTOKEN",
+			"prefs": {
+				"site_name": "${MB_SITE_NAME:-Metabase}",
+				"site_locale": "${MB_SITE_LOCALE:-en}",
+				"allow_tracking": "false"
+			},
+			"database": {
+				"engine": "${MB_BOOTSTRAP_DB_TYPE:?}",
+				"name": "${MB_BOOTSTRAP_DB_NAME:?}",
+				"details": {
+					"host": "${MB_BOOTSTRAP_DB_HOST:?}",
+					"port": ${MB_BOOTSTRAP_DB_PORT:?},
+					"dbname": "${MB_BOOTSTRAP_DB_DBNAME:?}",
+					"user": "${MB_BOOTSTRAP_DB_USER:?}",
+					"password": "${MB_BOOTSTRAP_DB_PASS:?}",
+					"ssl": ${MB_BOOTSTRAP_DB_SSL:-false},
+					"additional-options": "${MB_BOOTSTRAP_DB_OPTS}",
+					"tunnel-enabled": ${MB_BOOTSTRAP_DB_TUNNEL:-false}
+				},
+				"is_full_sync": ${MB_BOOTSTRAP_DB_SYNC:-true},
+				"schedules": {}
+			},
+			"user": {
+				"first_name": "${MB_ADMIN_FIRSTNAME:?}",
+				"last_name": "${MB_ADMIN_LASTNAME:?}",
+				"email": "${MB_ADMIN_EMAIL:?}",
+				"password": "${MB_ADMIN_PASSWORD:?}",
+				"site_name": "${MB_SITE_NAME:-Metabase}"
+			}
+		}
+		EOF
+
+	local ERROR=`curl -sSL http://localhost:3000/api/setup -H 'Content-Type: application/json' --data-raw "$JSON" | jq -r '.errors // empty'`
+	[[ -n "$ERROR" ]] && echo $ERROR && exit 1
+
+	echo Metabase auto setup completed.
+}
+
+[[ "${MB_AUTO_SETUP:-true}" == "true" ]] && setup

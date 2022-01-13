@@ -48,6 +48,7 @@ services:
       MB_ADMIN_EMAIL: admin@metabase.com
       MB_ADMIN_PASSWORD: S3cP4ssW000
 
+      MB_BOOTSTRAP_DB: 'true'
       MB_BOOTSTRAP_DB_TYPE: mysql
       MB_BOOTSTRAP_DB_NAME: Test DB
       MB_BOOTSTRAP_DB_HOST: mysql

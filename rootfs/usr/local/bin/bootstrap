@@ -83,29 +83,35 @@ setup() {
 
 	echo Metabase auto setup started.
 
+	BOOTSTRAP_DB_JSON=
+	if [[ "$MB_BOOTSTRAP_DB" == "true" ]]; then
+		read -r -d '' BOOTSTRAP_DB_JSON <<-EOF
+				"database": {
+					"engine": "${MB_BOOTSTRAP_DB_TYPE:?}",
+					"name": "${MB_BOOTSTRAP_DB_NAME:?}",
+					"details": {
+						"host": "${MB_BOOTSTRAP_DB_HOST:?}",
+						"port": ${MB_BOOTSTRAP_DB_PORT:?},
+						"dbname": "${MB_BOOTSTRAP_DB_DBNAME:?}",
+						"user": "${MB_BOOTSTRAP_DB_USER:?}",
+						"password": "${MB_BOOTSTRAP_DB_PASS:?}",
+						"ssl": ${MB_BOOTSTRAP_DB_SSL:-false},
+						"additional-options": "${MB_BOOTSTRAP_DB_OPTS}",
+						"tunnel-enabled": ${MB_BOOTSTRAP_DB_TUNNEL:-false}
+					},
+					"is_full_sync": ${MB_BOOTSTRAP_DB_SYNC:-true},
+					"schedules": {}
+				},
+			EOF
+	fi
 	read -r -d '' JSON <<-EOF
 		{
+			$BOOTSTRAP_DB_JSON
 			"token": "$SETUPTOKEN",
 			"prefs": {
 				"site_name": "${MB_SITE_NAME:-Metabase}",
 				"site_locale": "${MB_SITE_LOCALE:-en}",
 				"allow_tracking": "false"
-			},
-			"database": {
-				"engine": "${MB_BOOTSTRAP_DB_TYPE:?}",
-				"name": "${MB_BOOTSTRAP_DB_NAME:?}",
-				"details": {
-					"host": "${MB_BOOTSTRAP_DB_HOST:?}",
-					"port": ${MB_BOOTSTRAP_DB_PORT:?},
-					"dbname": "${MB_BOOTSTRAP_DB_DBNAME:?}",
-					"user": "${MB_BOOTSTRAP_DB_USER:?}",
-					"password": "${MB_BOOTSTRAP_DB_PASS:?}",
-					"ssl": ${MB_BOOTSTRAP_DB_SSL:-false},
-					"additional-options": "${MB_BOOTSTRAP_DB_OPTS}",
-					"tunnel-enabled": ${MB_BOOTSTRAP_DB_TUNNEL:-false}
-				},
-				"is_full_sync": ${MB_BOOTSTRAP_DB_SYNC:-true},
-				"schedules": {}
 			},
 			"user": {
 				"first_name": "${MB_ADMIN_FIRSTNAME:?}",

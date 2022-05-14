@@ -1,36 +1,38 @@
 version: '3.7'
 services:
   metabase:
-    image: t7tran/metabase:0.43.0
+    image: t7tran/metabase:0.43.0-1
     read_only: true
     user: metabase
     depends_on:
     - mysql
+    - mailhog
     ports:
     - "3000:3000"
     healthcheck:
-      test: ["CMD", "bootstrap"]
+      test: ["CMD", "healthcheck"]
       interval: 5s
       timeout: 3s
       retries: 60
     environment:
+      MB_ENTRYPOINT_DEBUG: true
       MB_DB_TYPE: mysql
       MB_DB_HOST: mysql
       MB_DB_DBNAME: metabase
       MB_DB_PORT: 3306
       MB_DB_USER: dev
       MB_DB_PASS: dev
-      MB_PLUGINS_DIR: /opt/plugins
+      MB_PLUGINS_DIR: /tmp
       MB_ENCRYPTION_SECRET_KEY: 0123456789abcxyz
       MB_EMBEDDING_SECRET_KEY: f31ccdfcb6032900dd4444a2e02dfdfb1fc4239e12ef086a108788fa935db1f7
       MB_JDBC_DATA_WAREHOUSE_MAX_CONNECTION_POOL_SIZE: 15
       MB_APPLICATION_DB_MAX_CONNECTION_POOL_SIZE: 15
       MB_ASYNC_QUERY_THREAD_POOL_SIZE: 50
       MB_DB_AUTOMIGRATE: 'true'
-      MB_EMAIL_FROM_ADDRESS: 
-      MB_EMAIL_SMTP_HOST: 
-      MB_EMAIL_SMTP_PORT: 
-      MB_EMAIL_SMTP_SECURITY: 
+      MB_EMAIL_FROM_ADDRESS: admin@example.com
+      MB_EMAIL_SMTP_HOST: mailhog
+      MB_EMAIL_SMTP_PORT: 1025
+      MB_EMAIL_SMTP_SECURITY: none
       MB_ENABLE_PUBLIC_SHARING: 'true'
       MB_ENABLE_QUERY_CACHING: 'true'
       MB_GOOGLE_AUTH_CLIENT_ID: 
@@ -57,9 +59,9 @@ services:
       MB_BOOTSTRAP_DB_USER: dev
       MB_BOOTSTRAP_DB_PASS: dev
 
+      MB_SEND_EMAIL_ON_FIRST_LOGIN_FROM_NEW_DEVICE: false
     volumes:
     - temp:/tmp:rw
-    - plugins:/opt/plugins:rw
   mysql:
     image: t7tran/mysql:5.7
     read_only: true
@@ -73,6 +75,13 @@ services:
     - temp:/tmp:rw
     - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
     - ./mysqlsampledatabase.sql:/opt/mysqlsampledatabase.sql:ro
+
+  mailhog:
+    image: mailhog/mailhog:v1.0.1
+    read_only: true
+    ports:
+    - "8025:8025"
+
 volumes:
   mysql:
     labels:

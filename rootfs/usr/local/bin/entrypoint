@@ -1,9 +1,11 @@
 #!/usr/bin/env bash
 
-[[ "$@" == *debug* ]] && set -x
+[[ -n "$MB_ENTRYPOINT_DEBUG" ]] && set -x
 
-status=`curl --connect-timeout 1 -fsSL http://127.0.0.1:3000/api/health 2>/dev/null | jq -r '.status // empty'`
-[[ "$status" != "ok" ]] && exit 1
+if [[ "${MB_AUTO_SETUP:-true}" != "true" ]]; then
+	exec "$@"
+fi
+
 SESSIONID=
 
 invoke() {
@@ -135,6 +137,13 @@ setup() {
 	fi
 }
 
-[[ "${MB_AUTO_SETUP:-true}" == "true" ]] && setup
+"$@" &
 
+while ! healthcheck; do
+	sleep 5
+done
+
+setup
 logout
+
+wait

@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+status=`curl --connect-timeout 1 -fsSL http://127.0.0.1:3000/api/health 2>/dev/null | jq -r '.status // empty'`
+if [[ "$status" != "ok" ]]; then
+	exit 1
+fi

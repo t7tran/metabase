@@ -7,8 +7,6 @@ ENV METABASE_VERSION=0.43.0 \
     MB_EMOJI_IN_LOGS=false \
     MB_ENABLE_EMBEDDING=true
 
-COPY ./rootfs /
-
 RUN addgroup metabase && adduser -S -D -G metabase metabase && \
 # add font support for xlsx export
     apk --no-cache add msttcorefonts-installer fontconfig bash curl && \
@@ -19,11 +17,12 @@ RUN addgroup metabase && adduser -S -D -G metabase metabase && \
     chmod +x /usr/local/bin/jq && \
 # download metabase
     curl -fsSLo /opt/metabase.jar https://downloads.metabase.com/v${METABASE_VERSION}/metabase.jar && \
-# make scripts executable
-    chmod +x /usr/local/bin/bootstrap && \
 # clean up
     rm -rf /apk /tmp/* /var/cache/apk/*
 
+COPY ./rootfs /
+
 USER metabase
 
+ENTRYPOINT ["entrypoint"]
 CMD ["java", "-Dlog4j.configuration=file:/opt/metabase/log4j.properties", "-jar", "/opt/metabase.jar"]

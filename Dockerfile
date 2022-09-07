@@ -1,4 +1,4 @@
-FROM openjdk:8-jre-alpine
+FROM eclipse-temurin:17-jre-alpine
 
 ENV METABASE_VERSION=0.44.2 \
     JQ_VERSION=1.6 \

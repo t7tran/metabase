@@ -1,6 +1,6 @@
 FROM eclipse-temurin:17-jre-alpine
 
-ENV METABASE_VERSION=0.45.1 \
+ENV METABASE_VERSION=0.45.2 \
     JQ_VERSION=1.6 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \

@@ -7,7 +7,8 @@ ENV METABASE_VERSION=0.46.5 \
     MB_EMOJI_IN_LOGS=false \
     MB_ENABLE_EMBEDDING=true
 
-RUN addgroup metabase && adduser -S -D -G metabase metabase && \
+RUN apk upgrade --no-cache && \
+    addgroup metabase && adduser -S -D -G metabase metabase && \
 # add font support for xlsx export
     apk --no-cache add msttcorefonts-installer fontconfig bash curl && \
     update-ms-fonts && \

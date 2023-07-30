@@ -1,7 +1,7 @@
 version: '3.7'
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.46.6.4
+    image: ghcr.io/t7tran/metabase:0.46.6-4
     read_only: true
     user: metabase
     depends_on:

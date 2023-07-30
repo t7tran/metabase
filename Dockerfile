@@ -1,4 +1,4 @@
-FROM eclipse-temurin:17-jre-alpine
+FROM amazoncorretto:17-alpine
 
 ENV METABASE_VERSION=0.46.6.4 \
     JQ_VERSION=1.6 \

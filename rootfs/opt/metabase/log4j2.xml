@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+  <Appenders>
+    <Console name="STDOUT" target="SYSTEM_OUT" follow="true">
+      <PatternLayout pattern="%date %level %logger{2} :: %message%n%throwable">
+        <replace regex=":basic-auth \\[.*\\]" replacement=":basic-auth [redacted]"/>
+      </PatternLayout>
+    </Console>
+  </Appenders>
+
+  <Loggers>
+    <Logger name="metabase" level="WARN"/>
+    <Logger name="metabase-enterprise" level="WARN"/>
+    <Logger name="metabase.metabot" level="WARN"/>
+    <Logger name="metabase.plugins" level="WARN"/>
+    <Logger name="metabase.server.middleware" level="WARN"/>
+    <Logger name="metabase.query-processor.async" level="WARN"/>
+    <Logger name="com.mchange" level="ERROR"/>
+    <Logger name="org.quartz" level="WARN"/>
+    <Logger name="liquibase" level="ERROR"/>
+    <Logger name="net.snowflake.client.jdbc.SnowflakeConnectString" level="ERROR"/>
+
+    <Root level="WARN">
+      <AppenderRef ref="STDOUT"/>
+    </Root>
+  </Loggers>
+</Configuration>

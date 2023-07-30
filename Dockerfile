@@ -26,4 +26,4 @@ COPY ./rootfs /
 USER metabase
 
 ENTRYPOINT ["entrypoint"]
-CMD ["java", "-Dlog4j.configuration=file:/opt/metabase/log4j.properties", "-jar", "/opt/metabase.jar"]
+CMD ["java", "-Dlog4j.configurationFile=file:/opt/metabase/log4j2.xml", "-jar", "/opt/metabase.jar"]

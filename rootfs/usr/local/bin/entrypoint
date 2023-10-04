@@ -69,9 +69,8 @@ defaultDashboard() {
 	# add default card
 	local cards=`invoke /api/dashboard/1 | jq -r '.ordered_cards | length'`
 	if [[ "$cards" == "0" ]]; then
-		local card=`invoke POST /api/dashboard/1/cards '{}' | jq -r '.id'`
 		read -r -d '' JSON <<-EOF
-			{"cards":[{"id":${card:?},"card_id":null,"row":0,"col":0,"sizeX":4,"sizeY":4,"series":[],"visualization_settings":{"virtual_card":{"name":null,"display":"text","visualization_settings":{},"dataset_query":{},"archived":false}},"parameter_mappings":[]}]}
+			{"cards":[{"id":-1,"card_id":null,"row":0,"col":0,"sizeX":4,"sizeY":4,"series":[],"visualization_settings":{"virtual_card":{"name":null,"display":"text","visualization_settings":{},"dataset_query":{},"archived":false}},"parameter_mappings":[]}]}
 			EOF
 		invoke PUT /api/dashboard/1/cards "${JSON}" &>/dev/null
 	fi
@@ -80,6 +79,9 @@ defaultDashboard() {
 }
 
 setup() {
+	local USERSETUP=`invoke /api/session/properties 2>/dev/null | jq -r '.["has-user-setup"] // empty'`
+	[[ "$USERSETUP" == "true" ]] && return 0
+
 	local SETUPTOKEN=`invoke /api/session/properties 2>/dev/null | jq -r '.["setup-token"] // empty'`
 	[[ -z "$SETUPTOKEN" ]] && return 0
 
@@ -125,7 +127,8 @@ setup() {
 		}
 		EOF
 
-	local ERROR=`invoke /api/setup "$JSON" | jq -r '.errors // empty'`
+	# ignore plain text error if metabase has been set up
+	local ERROR=`invoke /api/setup "$JSON" | jq -r '.errors // empty' 2>/dev/null`
 	[[ -n "$ERROR" ]] && echo $ERROR && exit 1
 
 	echo Metabase auto setup completed.

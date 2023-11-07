@@ -1,7 +1,7 @@
 FROM amazoncorretto:17-alpine
 
-ENV METABASE_VERSION=0.47.6 \
-    JQ_VERSION=1.6 \
+ENV METABASE_VERSION=0.47.7 \
+    JQ_VERSION=1.7 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \
     MB_EMOJI_IN_LOGS=false \

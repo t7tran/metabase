@@ -1,4 +1,4 @@
-FROM amazoncorretto:17-alpine
+FROM amazoncorretto:17.0.9-alpine
 
 ENV METABASE_VERSION=0.47.9 \
     JQ_VERSION=1.7 \

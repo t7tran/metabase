@@ -1,7 +1,8 @@
 version: '3.7'
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.47.12
+    image: ghcr.io/t7tran/metabase:0.47.13
+    working_dir: /opt
     read_only: true
     user: metabase
     depends_on:
@@ -60,10 +61,11 @@ services:
       MB_BOOTSTRAP_DB_PASS: dev
 
       MB_SEND_EMAIL_ON_FIRST_LOGIN_FROM_NEW_DEVICE: false
+      MB_AUTO_SETUP: false
     volumes:
     - temp:/tmp:rw
   mysql:
-    image: t7tran/mysql:5.7
+    image: ghcr.io/t7tran/mysql:5.7.44
     read_only: true
     environment:
       MYSQL_ROOT_PASSWORD: dev

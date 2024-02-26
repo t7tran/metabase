@@ -2,6 +2,10 @@
 
 [[ -n "$MB_ENTRYPOINT_DEBUG" ]] && set -x
 
+if [[ -d "$MB_PLUGINS_DIR" ]]; then
+	cp -n /opt/plugins/*.jar "$MB_PLUGINS_DIR"
+fi
+
 if [[ "${MB_AUTO_SETUP:-true}" != "true" ]]; then
 	exec "$@"
 fi

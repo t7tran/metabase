@@ -1,6 +1,6 @@
-FROM amazoncorretto:17.0.10-alpine
+FROM amazoncorretto:17.0.11-alpine
 
-ENV METABASE_VERSION=0.49.0 \
+ENV METABASE_VERSION=0.49.13 \
     JQ_VERSION=1.7 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \

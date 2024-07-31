@@ -1,12 +1,12 @@
 version: '3.7'
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.49.13
+    image: ghcr.io/t7tran/metabase:0.50.18
     working_dir: /opt
     read_only: true
     user: metabase
     depends_on:
-    - mysql
+    - postgres
     - mailhog
     ports:
     - "3000:3000"
@@ -17,12 +17,12 @@ services:
       retries: 60
     environment:
       MB_ENTRYPOINT_DEBUG: true
-      MB_DB_TYPE: mysql
-      MB_DB_HOST: mysql
+      MB_DB_TYPE: postgres
+      MB_DB_HOST: postgres
       MB_DB_DBNAME: metabase
-      MB_DB_PORT: 3306
-      MB_DB_USER: dev
-      MB_DB_PASS: dev
+      MB_DB_PORT: 5432
+      MB_DB_USER: metabase
+      MB_DB_PASS: metabase
       MB_PLUGINS_DIR: /tmp
       MB_ENCRYPTION_SECRET_KEY: 0123456789abcxyz
       MB_EMBEDDING_SECRET_KEY: f31ccdfcb6032900dd4444a2e02dfdfb1fc4239e12ef086a108788fa935db1f7
@@ -52,31 +52,31 @@ services:
       MB_ADMIN_PASSWORD: S3cP4ssW000
 
       MB_BOOTSTRAP_DB: 'true'
-      MB_BOOTSTRAP_DB_TYPE: mysql
+      MB_BOOTSTRAP_DB_TYPE: postgres
       MB_BOOTSTRAP_DB_NAME: Test DB
-      MB_BOOTSTRAP_DB_HOST: mysql
-      MB_BOOTSTRAP_DB_PORT: 3306
+      MB_BOOTSTRAP_DB_HOST: postgres
+      MB_BOOTSTRAP_DB_PORT: 5432
       MB_BOOTSTRAP_DB_DBNAME: testdb
-      MB_BOOTSTRAP_DB_USER: dev
-      MB_BOOTSTRAP_DB_PASS: dev
+      MB_BOOTSTRAP_DB_USER: metabase
+      MB_BOOTSTRAP_DB_PASS: metabase
 
       MB_SEND_EMAIL_ON_FIRST_LOGIN_FROM_NEW_DEVICE: false
       MB_AUTO_SETUP: false
     volumes:
     - temp:/tmp:rw
-  mysql:
-    image: ghcr.io/t7tran/mysql:5.7.44
+  postgres:
+    image: ghcr.io/t7tran/postgres:15.7.0
     read_only: true
     environment:
-      MYSQL_ROOT_PASSWORD: dev
-      MYSQL_USER: dev
-      MYSQL_PASSWORD: dev
+      POSTGRES_USER: metabase
+      POSTGRES_PASSWORD: metabase
     volumes:
-    - mysql:/var/lib/mysql:rw
-    - temp:/var/run/mysqld:rw
-    - temp:/tmp:rw
-    - ./init.sql:/docker-entrypoint-initdb.d/init.sql:ro
-    - ./mysqlsampledatabase.sql:/opt/mysqlsampledatabase.sql:ro
+      - postgres:/var/lib/postgresql/data
+      - ./99-init.sql:/docker-entrypoint-initdb.d/99-init.sql:ro
+      - type: tmpfs
+        target: /var/run/postgresql
+        tmpfs:
+          mode: 01777
 
   mailhog:
     image: mailhog/mailhog:v1.0.1
@@ -85,7 +85,7 @@ services:
     - "8025:8025"
 
 volumes:
-  mysql:
+  postgres:
     labels:
     - "keep=true"
     - "app=metabase"

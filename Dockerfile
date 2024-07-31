@@ -1,7 +1,7 @@
-FROM amazoncorretto:17.0.11-alpine
+FROM amazoncorretto:17.0.12-alpine
 
-ENV METABASE_VERSION=0.49.13 \
-    JQ_VERSION=1.7 \
+ENV METABASE_VERSION=0.50.18 \
+    JQ_VERSION=1.7.1 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \
     MB_EMOJI_IN_LOGS=false \
@@ -19,7 +19,7 @@ RUN apk upgrade --no-cache && \
 # download metabase
     mkdir -p /opt/plugins && \
     curl -fsSLo /opt/metabase.jar https://downloads.metabase.com/v${METABASE_VERSION}/metabase.jar && \
-    curl -fsSLo /opt/plugins/ojdbc11.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.3.0.23.09/ojdbc11-23.3.0.23.09.jar && \
+    curl -fsSLo /opt/plugins/ojdbc11.jar https://repo1.maven.org/maven2/com/oracle/database/jdbc/ojdbc11/23.4.0.24.05/ojdbc11-23.4.0.24.05.jar && \
 # clean up
     rm -rf /apk /tmp/* /var/cache/apk/*
 

@@ -5,7 +5,9 @@ ENV METABASE_VERSION=0.52.5 \
     MB_ANON_TRACKING_ENABLED=false \
     MB_CHECK_FOR_UPDATES=false \
     MB_EMOJI_IN_LOGS=false \
-    MB_ENABLE_EMBEDDING=true
+    MB_ENABLE_EMBEDDING_STATIC=true \
+    MB_ENABLE_EMBEDDING_SDK=true \
+    MB_ENABLE_EMBEDDING_INTERACTIVE=true
 
 RUN apk upgrade --no-cache && \
     addgroup metabase && adduser -S -D -G metabase metabase && \

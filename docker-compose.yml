@@ -1,6 +1,6 @@
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.53.8
+    image: ghcr.io/t7tran/metabase:0.54.1
     working_dir: /opt
     read_only: true
     user: metabase

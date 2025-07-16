@@ -1,6 +1,6 @@
-FROM amazoncorretto:21.0.6-alpine
+FROM amazoncorretto:21.0.7-alpine
 
-ENV METABASE_VERSION=0.55.3 \
+ENV METABASE_VERSION=0.55.8 \
     JQ_VERSION=1.7.1 \
     ORACLE_JDBC_VERSION=23.7.0.25.01 \
     MB_ANON_TRACKING_ENABLED=false \

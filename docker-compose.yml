@@ -1,6 +1,6 @@
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.57.4
+    image: ghcr.io/t7tran/metabase:0.57.7
     working_dir: /opt
     read_only: true
     user: metabase
@@ -64,7 +64,7 @@ services:
     volumes:
     - temp:/tmp:rw
   postgres:
-    image: ghcr.io/t7tran/postgres:17.2.0
+    image: ghcr.io/t7tran/postgres:17.6.0
     read_only: true
     environment:
       POSTGRES_USER: metabase

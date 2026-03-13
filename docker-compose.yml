@@ -1,14 +1,14 @@
 services:
   metabase:
-    image: ghcr.io/t7tran/metabase:0.59.1
+    image: ghcr.io/t7tran/metabase:0.59.2
     working_dir: /opt
     read_only: true
     user: metabase
     depends_on:
-    - postgres
-    - mailhog
+      - postgres
+      - mailhog
     ports:
-    - "3000:3000"
+      - "3000:3000"
     healthcheck:
       test: ["CMD", "healthcheck"]
       interval: 5s
@@ -28,18 +28,18 @@ services:
       MB_JDBC_DATA_WAREHOUSE_MAX_CONNECTION_POOL_SIZE: 15
       MB_APPLICATION_DB_MAX_CONNECTION_POOL_SIZE: 15
       MB_ASYNC_QUERY_THREAD_POOL_SIZE: 50
-      MB_DB_AUTOMIGRATE: 'true'
+      MB_DB_AUTOMIGRATE: "true"
       MB_EMAIL_FROM_ADDRESS: admin@example.com
       MB_EMAIL_SMTP_HOST: mailhog
       MB_EMAIL_SMTP_PORT: 1025
       MB_EMAIL_SMTP_SECURITY: none
-      MB_ENABLE_PUBLIC_SHARING: 'true'
-      MB_ENABLE_QUERY_CACHING: 'true'
-      MB_GOOGLE_AUTH_CLIENT_ID: 
-      MB_GOOGLE_AUTH_AUTO_CREATE_ACCOUNTS_DOMAIN: 
-      MB_SHOW_HOMEPAGE_XRAYS: 'false'
-      MB_SHOW_HOMEPAGE_DATA: 'false'
-# see more at https://www.metabase.com/docs/latest/operations-guide/environment-variables.html
+      MB_ENABLE_PUBLIC_SHARING: "true"
+      MB_ENABLE_QUERY_CACHING: "true"
+      MB_GOOGLE_AUTH_CLIENT_ID:
+      MB_GOOGLE_AUTH_AUTO_CREATE_ACCOUNTS_DOMAIN:
+      MB_SHOW_HOMEPAGE_XRAYS: "false"
+      MB_SHOW_HOMEPAGE_DATA: "false"
+      # see more at https://www.metabase.com/docs/latest/operations-guide/environment-variables.html
 
       MB_SITE_NAME: Test Metabase
       MB_SITE_URL: http://localhost:3000
@@ -50,7 +50,7 @@ services:
       MB_ADMIN_EMAIL: admin@metabase.com
       MB_ADMIN_PASSWORD: S3cP4ssW000
 
-      MB_BOOTSTRAP_DB: 'true'
+      MB_BOOTSTRAP_DB: "true"
       MB_BOOTSTRAP_DB_TYPE: postgres
       MB_BOOTSTRAP_DB_NAME: Test DB
       MB_BOOTSTRAP_DB_HOST: postgres
@@ -62,7 +62,7 @@ services:
       MB_SEND_EMAIL_ON_FIRST_LOGIN_FROM_NEW_DEVICE: false
       MB_AUTO_SETUP: false
     volumes:
-    - temp:/tmp:rw
+      - temp:/tmp:rw
   postgres:
     image: ghcr.io/t7tran/postgres:17.6.0
     read_only: true
@@ -81,17 +81,17 @@ services:
     image: mailhog/mailhog:v1.0.1
     read_only: true
     ports:
-    - "8025:8025"
+      - "8025:8025"
 
 volumes:
   postgres:
     labels:
-    - "keep=true"
-    - "app=metabase"
+      - "keep=true"
+      - "app=metabase"
   plugins:
     labels:
-    - "keep=true"
-    - "app=metabase"
+      - "keep=true"
+      - "app=metabase"
   temp:
     labels:
-    - "app=metabase"
+      - "app=metabase"
